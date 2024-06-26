@@ -4,7 +4,7 @@ async function checkEmail(req, res) {
   try {
     const { email } = req.body;
 
-    const checkEmail = await User.findOne({ email }, "name email");
+    const checkEmail = await User.findOne({ email });
     if (!checkEmail) {
       return res.status(400).json({
         message: "User not Exist",

@@ -1,5 +1,4 @@
 const UserModel = require("../model/UserModel");
-const bcryptjs = require("bcryptjs");
 async function registerUser(req, res) {
   try {
     //Destructring data from userModel
@@ -13,14 +12,14 @@ async function registerUser(req, res) {
         error: true,
       });
     }
-    //Now change Plane password into HasPasswor using bcrypt password
-    const salt = await bcryptjs.genSalt(12);
-    const hashpassword = await bcryptjs.hash(password, salt);
+    // //Now change Plane password into HasPassword using bcrypt password
+    // const salt = await bcryptjs.genSalt(12);
+    // const hashpassword = await bcryptjs.hash(password, salt);
 
     const payload = {
       name,
       email,
-      password: hashpassword,
+      password,
       profile_pic,
     };
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcryptjs = require("bcryptjs");
 
 const userScehma = new mongoose.Schema(
   {
@@ -31,6 +32,15 @@ userScehma.methods.toJSON = function () {
   return obj;
 };
 
+userScehma.pre("save", async function (next) {
+  try {
+    const salt = await bcryptjs.genSalt(12);
+    this.password = await bcryptjs.hash(this.password, salt);
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 const UserModel = mongoose.model("User", userScehma);
 
 module.exports = UserModel;

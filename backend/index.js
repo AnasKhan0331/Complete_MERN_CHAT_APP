@@ -3,8 +3,9 @@ const cors = require("cors");
 require("dotenv").config();
 const router = require("./router"); // Ensure the router is correctly imported
 const app = express();
-
+const cookiesParser = require("cookie-parser");
 const { connectDB } = require("./config/connectDB");
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -21,6 +22,7 @@ app.get("/", (request, response) => {
 });
 
 app.use(express.json()); // Correct the usage of express.json
+app.use(cookiesParser());
 
 // API end points
 app.use("/api", router);

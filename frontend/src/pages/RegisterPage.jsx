@@ -1,16 +1,19 @@
+import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import uploadFile from "../utils/uploadImage";
 const RegisterPage = () => {
+
   const [data, setData] = useState({
     name: "",
     email: "",
     password: "",
     profile_pic: ""
   })
-  const [uploadPhoto, setUploadPhoto] = useState("")
-
+  const [uploadPhoto, setUploadPhoto] = useState(null)
+  const navigate = useNavigate()
   const handleChange = (e) => {
     const { name, value } = e.target
     setData((prev) => {
@@ -21,23 +24,45 @@ const RegisterPage = () => {
     })
   }
 
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     const file = e.target.files[0]
+    const uploadPhoto = await uploadFile(file)
     setUploadPhoto(file)
+    setData((prev) => {
+      return {
+        ...prev,
+        profile_pic: uploadPhoto?.url
+      }
+    })
   }
   const handleClearUploadPhoto = (e) => {
     e.stopPropagation()
     e.preventDefault()
     setUploadPhoto(null)
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     e.stopPropagation()
+    const URL = `${import.meta.env.VITE_APP_BACKEND_URL}/api/register`
+    try {
+      const response = await axios.post(URL, data)
+      toast.success(response?.data?.message)
+      if (response?.data?.success) {
+        setData({
+          name: "",
+          email: "",
+          password: "",
+          profile_pic: ""
+        })
+        navigate('/email')
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message)
+    }
   }
-  console.log("data", data)
   return <>
     <div className="my-2" >
-      <div className=" bg-white p-4 w-full max-w-sm mx-2 rounded overflow-hidden mx-auto">
+      <div className=" bg-white p-4 w-full max-w-sm rounded overflow-hidden mx-auto">
         <h3>Welcome to chat app!</h3>
         <form className="my-5" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1 my-3">
@@ -69,9 +94,10 @@ const RegisterPage = () => {
                 }
               </div>
             </label>
-            <input className="py-1 px-2 bg-slate-200 focus:outline-primary hidden" id="profile_pic" name="profile_pic" type="file" value={data.profile_pic} onChange={handleUpload} />
+            <input className="py-1 px-2 bg-slate-200 focus:outline-primary hidden" id="profile_pic" name="profile_pic" type="file" onChange={handleUpload} />
           </div>
-          <button className="bg-primary w-full text-white text-sm text-md px-4 py-3 rounded hover:bg-secondary  mt-2">
+          <button disabled={!data.profile_pic}
+            className="bg-primary w-full text-white text-sm text-md px-4 py-3 rounded hover:bg-secondary  mt-2">
             Register
           </button>
           <p className="my-2 text-sm px-1 text-center" >

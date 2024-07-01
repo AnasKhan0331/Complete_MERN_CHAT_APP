@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../../public/assets/images/logo.png"
+import logo from "/assets/images/logo.png"
 const AuthLayout = ({ children }) => {
     return (
         <>

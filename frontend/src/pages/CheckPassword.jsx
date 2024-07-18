@@ -29,7 +29,6 @@ const CheckPassword = () => {
     e.stopPropagation()
     const URL = `${import.meta.env.VITE_APP_BACKEND_URL}/api/password`
     try {
-      // const response = await axios.post(URL, { password: data?.password, userId: location?.state?._id })
       const response = await axios({
         method: "post",
         url: URL,

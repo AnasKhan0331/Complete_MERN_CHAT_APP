@@ -4,20 +4,24 @@ const checkEmail = require("../controller/checkEmail");
 const checkPassword = require("../controller/checkPassword");
 const userDetails = require("../controller/userDetails");
 const logOut = require("../controller/logout");
+const searchUserFile = require("../controller/searchUser");
 const updateUserDetails = require("../controller/updateUserDetail");
 
 const router = express.Router();
-// register API
+
+// Register API
 router.post("/register", registerUser);
-// check email API
+// Check Email API
 router.post("/email", checkEmail);
-// check Password API
+// Check Password API
 router.post("/password", checkPassword);
-// check User Details API
+// User Details API
 router.get("/user-details", userDetails);
-// check Logout API
+// Logout API
 router.get("/logout", logOut);
-// check User Update API
-router.get("/update-user", updateUserDetails);
+// Update User Details API
+router.post("/update-user", updateUserDetails);
+// Search User API
+router.post("/search-user", searchUserFile);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 async function checkPassword(req, res) {
   try {
     const { password, userId } = req.body;
+    console.log("req.body", req.body);
     const user = await UserModel.findById(userId);
     const verifyPassword = await bcryptjs.compare(password, user.password);
 
@@ -31,7 +32,7 @@ async function checkPassword(req, res) {
 
     return res.cookie("token", token, cookiesOptions).status(200).json({
       message: " Login Successfully",
-      data: token,
+      token: token,
       success: true,
     });
   } catch (error) {

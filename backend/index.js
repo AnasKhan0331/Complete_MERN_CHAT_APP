@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const router = require("./router"); // Ensure the router is correctly imported
-const app = express();
+// const app = express();
 const cookiesParser = require("cookie-parser");
 const { connectDB } = require("./config/connectDB");
+const { app, server } = require("./socket");
 
 app.use(
   cors({
@@ -30,7 +31,7 @@ app.use("/api", router);
 // Use connectDB correctly
 connectDB()
   .then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log("Server is running at port " + PORT);
     });
   })
